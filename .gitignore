@@ -1,0 +1,76 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+node_modules/
+
+### Intellij ###
+*.iml
+*.iws
+/out/
+
+# User-specific configurations
+**/.idea/caches/
+**/.idea/libraries/
+**/.idea/shelf/
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/.name
+**/.idea/compiler.xml
+**/.idea/copyright/profiles_settings.xml
+**/.idea/encodings.xml
+**/.idea/misc.xml
+**/.idea/modules.xml
+**/.idea/scopes/scope_settings.xml
+**/.idea/dictionaries
+**/.idea/vcs.xml
+**/.idea/jsLibraryMappings.xml
+**/.idea/datasources.xml
+**/.idea/dataSources.ids
+**/.idea/sqlDataSources.xml
+**/.idea/dynamic.xml
+**/.idea/uiDesigner.xml
+**/.idea/assetWizardSettings.xml
+**/.idea/gradle.xml
+**/.idea/jarRepositories.xml
+**/.idea/navEditor.xml
+**/.idea/kotlinc.xml
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Dart/Pub related
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+pubspec_overrides.yaml
+build/
+
+# Ignore generated files
+**.g.dart
+**.freezed.dart
+**.rpc.dart
+*.gen.dart
+
+# Exceptions to above rules.
+.metadata
+!/rpc_generator/test/src/expected/*.g.dart
+
+.fvm/
+.fvm/flutter_sdk
+**/.bundle
+**/fastlane/report.xml
+
+# Obsidian + dev diaries
+.obsidian/
+.docs/developers
+.docs/piecesdb.json

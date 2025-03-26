@@ -1,0 +1,4 @@
+analyzer:
+  exclude:
+    - "rpc_generator/test/src/expected/**"
+    - "rpc_generator/test/src/inputs/**"

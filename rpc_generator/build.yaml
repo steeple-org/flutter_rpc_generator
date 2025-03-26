@@ -1,0 +1,9 @@
+builders:
+  rpc_generator:
+    import: "package:rpc_generator/builder.dart"
+    builder_factories: ["rpcBuilder"]
+    build_extensions: { ".dart": [".rpc.dart"] }
+    auto_apply: dependents
+    build_to: source
+    runs_before: ["retrofit_generator"]
+    applies_builders: ["retrofit_generator"]

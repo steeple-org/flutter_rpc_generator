@@ -1,0 +1,9 @@
+name: "rpc_generator_workspace"
+publish_to: none
+
+environment:
+  sdk: ">=3.7.0 <4.0.0"
+
+workspace:
+  - rpc_annotations
+  - rpc_generator
