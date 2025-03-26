@@ -1,0 +1,65 @@
+name: 🔨🧪 Packages Tests & Analyze
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    branches:
+      - "main"
+    paths-ignore:
+      - "**.md"
+      - ".git/"
+      - ".vscode/"
+
+jobs:
+  test:
+    name: Tests
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: ⚙️ Setup Dart
+        uses: dart-lang/setup-dart@v1.5.0
+        with:
+          sdk: stable
+      - name: ⚙️ Setup Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          melos-version: 7.0.0-dev.7
+          run-bootstrap: false
+      - name: ⚙️ Install dependencies for all packages
+        run: dart pub get
+      - name: 🧪 Run tests
+        run: melos run test:all
+
+  analyze:
+    name: Analyze
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: ⚙️ Setup Dart
+        uses: dart-lang/setup-dart@v1.5.0
+        with:
+          sdk: stable
+      - name: ⚙️ Install dependencies for all packages
+        run: dart pub get
+      - name: 🧪 Analyze files
+        uses: invertase/github-action-dart-analyzer@v3
+        with:
+          fatal-infos: false

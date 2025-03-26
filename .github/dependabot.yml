@@ -1,0 +1,50 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "orevial"
+      - "Hinageshi"
+    groups:
+      package-dependencies:
+        patterns:
+          - "*"
+  - package-ecosystem: "pub"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "orevial"
+      - "Hinageshi"
+    groups:
+      package-dependencies:
+        patterns:
+          - "*"
+  - package-ecosystem: "pub"
+    directory: "/rpc_annotations"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "orevial"
+      - "Hinageshi"
+    groups:
+      package-dependencies:
+        patterns:
+          - "*"
+  - package-ecosystem: "pub"
+    directory: "/rpc_generator"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "orevial"
+      - "Hinageshi"
+    groups:
+      package-dependencies:
+        patterns:
+          - "*"

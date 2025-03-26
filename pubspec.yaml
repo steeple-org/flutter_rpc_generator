@@ -7,3 +7,21 @@ environment:
 workspace:
   - rpc_annotations
   - rpc_generator
+
+dev_dependencies:
+  melos: ^7.0.0-dev.7
+
+melos:
+  scripts:
+    test:
+      run: dart test --reporter github
+      exec:
+        concurrency: 2
+      packageFilters:
+        dirExists:
+          - test
+      description: Run tests for a specific package.
+
+    test:all:
+      run: melos run test --no-select
+      description: Run tests for all packages in this workspace.
