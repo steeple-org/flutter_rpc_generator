@@ -55,6 +55,8 @@ class RpcGenerator extends Generator {
     // Used to store the generated classes.
     final classes = <String>[];
 
+    classes.add('Test pourri');
+
     // For every annotated class, generate its associated Rpc api class and
     // extract its annoted `RpcRouter` fields to generate the associated Rpc
     // Routers.
