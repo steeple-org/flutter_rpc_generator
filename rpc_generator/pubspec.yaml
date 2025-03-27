@@ -9,12 +9,16 @@ environment:
 resolution: workspace
 
 dependencies:
+  rpc_annotations:
+    git:
+      url: https://github.com/steeple-org/flutter_rpc_generator.git
+      path: rpc_annotations
+
   analyzer: ^7.3.0
   build: ^2.4.1
   code_builder: ^4.10.1
   collection: ^1.19.1
   dart_style: ^3.0.1
-  rpc_annotations: ^1.0.0
   source_gen: ^2.0.0
   meta: ^1.15.0
 
