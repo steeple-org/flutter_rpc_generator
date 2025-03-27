@@ -1,6 +1,6 @@
 builders:
   rpc_generator:
-    import: "package:rpc_generator/builder.dart"
+    import: "package:rpc_generator/rpc_generator.dart"
     builder_factories: ["rpcBuilder"]
     build_extensions: { ".dart": [".rpc.dart"] }
     auto_apply: dependents
