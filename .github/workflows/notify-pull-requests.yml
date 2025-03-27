@@ -1,0 +1,107 @@
+name: 🔔 PR Notifier
+
+on:
+  pull_request:
+    types:
+      - closed
+      - review_requested
+    branches:
+      - "main"
+  pull_request_review:
+    types:
+      - submitted
+    branches:
+      - "main"
+
+jobs:
+  notifyPREvent:
+    name: 🔔 Notify Discord of a new Pull Request event
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setting user to notify
+        if: |
+          github.event.action == 'review_requested' ||
+          github.event_name == 'pull_request_review'
+        env:
+          GITHUB_LOGIN: ${{ github.event.requested_reviewer.login || github.event.pull_request.user.login}}
+        id: set_reviewer
+        run: |
+          if echo "${{vars.IDS_GITHUB_TO_DISCORD}}" | grep -q "$GITHUB_LOGIN"; then
+            echo "NAME=<@$(echo ${{ fromJSON(vars.IDS_GITHUB_TO_DISCORD)[env.GITHUB_LOGIN].discord_id }})>" >> $GITHUB_OUTPUT
+          else
+            echo "NAME=$GITHUB_LOGIN" >> $GITHUB_OUTPUT
+          fi
+      - name: 🔔🧑‍💻 Send a notification to reviewer when a PR review is requested
+        if: |
+          github.event_name == 'pull_request' &&
+          github.event.action == 'review_requested'
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BUILD_WEBHOOK_URL }}
+          avatar_url: ${{ secrets.DISCORD_BUILD_WEBHOOK_AVATAR }}
+          username: |
+            Pull Request notifier
+          color: 0x12AFFA
+          content: |
+            👋 Hey ${{ steps.set_reviewer.outputs.name }}, you've been asked to review a PR 🤓
+          description: |
+            Go and [check it now](${{ github.event.pull_request.html_url }}) !
+          title: |
+            Pull Request: ${{ github.event.pull_request.title }}
+          url: ${{ github.event.pull_request.html_url }}
+          noprefix: true
+      - name: 🔔🧑‍💻 Send a notification to PR author when a new review is submitted
+        if: |
+          github.event_name == 'pull_request_review' &&
+          github.event.action == 'submitted' &&
+          github.event.review.state != 'commented' &&
+          github.event.review.state != 'approved'
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BUILD_WEBHOOK_URL }}
+          avatar_url: ${{ secrets.DISCORD_BUILD_WEBHOOK_AVATAR }}
+          username: |
+            Pull Request notifier
+          color: 0x1B385E
+          content: |
+            👋 Hey ${{ steps.set_reviewer.outputs.name }}, there's a new review available for your PR 💬
+          description: |
+            Go and [check it now](${{ github.event.pull_request.html_url }}) !
+          title: |
+            Pull Request: ${{ github.event.pull_request.title }}
+          url: ${{ github.event.pull_request.html_url }}
+          noprefix: true
+
+      - name: 🔔✅ Send a notification when a PR is approved
+        if: github.event.review.state == 'approved'
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BUILD_WEBHOOK_URL }}
+          avatar_url: ${{ secrets.DISCORD_BUILD_WEBHOOK_AVATAR }}
+          username: |
+            Pull Request notifier
+          color: 0x00C02C
+          title: |
+            ✅ PR: ${{ github.event.pull_request.title }} has been approved!
+          description: |
+            Good job, a [pull request](${{ github.event.pull_request.html_url }}) has been approved 🎉
+            Do not forget to merge it 🔀
+          url: ${{ github.event.pull_request.html_url }}
+          noprefix: true
+
+      - name: 🔔🔀 Send a notification when a PR is merged
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BUILD_WEBHOOK_URL }}
+          avatar_url: ${{ secrets.DISCORD_BUILD_WEBHOOK_AVATAR }}
+          username: |
+            Pull Request notifier
+          color: 0x00C02C
+          title: |
+            🔀✅ PR merged: ${{ github.event.pull_request.title }} merged !
+          description: |
+            Good job, a [pull request](${{ github.event.pull_request.html_url }}) has been merged !
+            Time to start UAT release 📦🚀
+          url: ${{ github.event.pull_request.html_url }}
+          noprefix: true
