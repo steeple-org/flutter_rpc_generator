@@ -12,7 +12,7 @@ import 'package:source_gen/source_gen.dart';
 
 // This method has to be top-level.
 // ignore: prefer-static-class
-Builder generatorFactoryBuilder(BuilderOptions _) {
+Builder generatorFactoryBuilder(BuilderOptions options) {
   return PartBuilder(
     [const RpcGenerator()],
     '.rpc.dart',
@@ -20,6 +20,7 @@ Builder generatorFactoryBuilder(BuilderOptions _) {
     // coverage:ignore-file
     // GENERATED CODE - DO NOT MODIFY BY HAND
         ''',
+    options: options,
   );
 }
 
