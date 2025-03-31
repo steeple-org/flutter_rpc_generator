@@ -218,18 +218,12 @@ class RpcGenerator extends Generator {
     );
 
     final associatedClassName = associatedClass.name;
-    // If a call adapter is provided, create an expression that will be added to
-    // the `RestApi` retrofit annotation.
-    final callAdapterExpression =
-        callAdapter != null
-            ? 'callAdapter: ${callAdapter.getDisplayString()}'
-            : null;
 
     // Create the Router class.
     final routerClass = Class((clss) {
       clss
         // Add the `RestApi` annotation.
-        ..annotations.add(refer('RestApi(${callAdapterExpression ?? ''})'))
+        ..annotations.add(refer('RestApi()'))
         // Make the class abstract.
         ..abstract = true
         ..name = '_$associatedClassName'
@@ -265,7 +259,13 @@ class RpcGenerator extends Generator {
         // `RpcQuery` or `RpcMutation` and add them to the router class.
         ..methods.addAll(
           annotatedMethods.entries.map((entry) {
-            return _generateMethod(entry.key, entry.value, apiPath, routerName);
+            return _generateMethod(
+              entry.key,
+              entry.value,
+              apiPath,
+              routerName,
+              callAdapter,
+            );
           }),
         );
     });
@@ -284,6 +284,7 @@ class RpcGenerator extends Generator {
     ConstantReader annotation,
     String apiPath,
     String routerName,
+    DartType? callAdapter,
   ) {
     // Extract `RpcMethod` annotation fields.
     final rpcMethodName = annotation.read('name').stringValue;
@@ -297,6 +298,8 @@ class RpcGenerator extends Generator {
       rpcInputAnnotation.hasAnnotationOfExact,
     );
 
+    final returnType = method.returnType;
+
     // Create the query or mutation method.
     return Method((m) {
       m
@@ -306,9 +309,11 @@ class RpcGenerator extends Generator {
         ..annotations.addAll([
           refer('override'),
           refer("$httpMethod('$apiPath/$routerName.$rpcMethodName')"),
+          if (callAdapter != null && !returnType.hasVoidOrInnerVoidReturnType)
+            refer('UseCallAdapter(${callAdapter.getDisplayString()})'),
         ])
         // Copy the method return type and its name.
-        ..returns = refer(method.returnType.getDisplayString())
+        ..returns = refer(returnType.getDisplayString())
         ..name = method.name;
 
       if (annotatedParam != null) {
@@ -327,5 +332,15 @@ class RpcGenerator extends Generator {
         );
       }
     });
+  }
+}
+
+extension on DartType {
+  bool get hasVoidOrInnerVoidReturnType {
+    if (this is InterfaceType) {
+      return (this as InterfaceType).typeArguments.first is VoidType;
+    }
+
+    return this is VoidType;
   }
 }
