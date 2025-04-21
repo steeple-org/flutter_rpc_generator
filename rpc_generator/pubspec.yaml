@@ -14,7 +14,7 @@ dependencies:
       url: https://github.com/steeple-org/flutter_rpc_generator.git
       path: rpc_annotations
 
-  analyzer: ^7.3.0
+  analyzer: ^7.4.2
   build: ^2.4.1
   code_builder: ^4.10.1
   collection: ^1.19.1
