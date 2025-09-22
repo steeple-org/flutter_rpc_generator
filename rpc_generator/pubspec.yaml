@@ -14,15 +14,15 @@ dependencies:
       url: https://github.com/steeple-org/flutter_rpc_generator.git
       path: rpc_annotations
 
-  analyzer: ^7.3.0
-  build: ^2.4.1
-  code_builder: ^4.10.1
+  analyzer: ^7.7.1
+  build: ^3.1.0
+  code_builder: ^4.11.0
   collection: ^1.19.1
-  dart_style: ^3.0.1
-  source_gen: ^2.0.0
-  meta: ^1.15.0
+  dart_style: ^3.1.1
+  source_gen: ^4.0.0
+  meta: ^1.17.0
 
 dev_dependencies:
-  generator_test: ^0.4.1
-  retrofit_generator: ^9.1.9
-  test: ^1.25.15
+  generator_test: ^0.6.0
+  retrofit_generator: ^10.0.5
+  test: ^1.26.3
