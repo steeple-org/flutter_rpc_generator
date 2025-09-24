@@ -1,6 +1,6 @@
 name: rpc_generator
 description: A generator used to generate RPC APIs.
-version: 1.1.0
+version: 1.1.1
 publish_to: none
 
 environment:
@@ -17,10 +17,14 @@ dependencies:
   analyzer: ^8.2.0
   build: ^4.0.0
   code_builder: ^4.11.0
+  # Be careful, the version of this package must not be higher than the one pinned by the Flutter SDK.
+  # Check here: https://github.com/flutter/flutter/blob/stable/packages/flutter/pubspec.yaml
   collection: ^1.19.1
   dart_style: ^3.1.2
   source_gen: ^4.0.1
-  meta: ^1.17.0
+  # Be careful, the version of this package must not be higher than the one pinned by the Flutter SDK.
+  # Check here: https://github.com/flutter/flutter/blob/stable/packages/flutter/pubspec.yaml
+  meta: ^1.16.0
 
 dev_dependencies:
   generator_test: ^0.6.0
