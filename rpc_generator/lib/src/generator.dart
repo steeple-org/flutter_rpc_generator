@@ -24,7 +24,7 @@ Builder generatorFactoryBuilder(BuilderOptions options) {
   );
 }
 
-TypeChecker _typeChecker(Type type) => TypeChecker.fromRuntime(type);
+TypeChecker _typeChecker(Type type) => TypeChecker.typeNamed(type);
 
 class RpcGenerator extends Generator {
   const RpcGenerator();
@@ -106,8 +106,9 @@ class RpcGenerator extends Generator {
           );
         } else {
           // Extract the router name from the `RpcRouter` annotation.
-          final routerName =
-              rpcRouterAnnotatedFieldEntry.value.read('name').stringValue;
+          final routerName = rpcRouterAnnotatedFieldEntry.value
+              .read('name')
+              .stringValue;
 
           // Generate the associated Rpc router class and store it in generated
           // classes list.
@@ -144,7 +145,7 @@ class RpcGenerator extends Generator {
       clss
         ..name = className
         // Make the api class implements the class element.
-        ..implements.add(refer(element.name))
+        ..implements.add(refer(element.displayName))
         // Copy all annotated fields to the api class, and add the `@override`
         // annotation and the `final` modifier.
         ..fields.addAll(
@@ -217,7 +218,7 @@ class RpcGenerator extends Generator {
       }).nonNulls,
     );
 
-    final associatedClassName = associatedClass.name;
+    final associatedClassName = associatedClass.displayName;
 
     // Create the Router class.
     final routerClass = Class((clss) {
@@ -294,7 +295,7 @@ class RpcGenerator extends Generator {
     // Get `RpcInput` annotation type.
     final rpcInputAnnotation = _typeChecker(RpcInput);
     // Get the first method parameter annotated with `RpcInput`.
-    final annotatedParam = method.parameters.firstWhereOrNull(
+    final annotatedParam = method.baseElement.formalParameters.firstWhereOrNull(
       rpcInputAnnotation.hasAnnotationOfExact,
     );
 
@@ -327,7 +328,7 @@ class RpcGenerator extends Generator {
               ..annotations.add(refer(paramAnnotation))
               // Copy the parameter type and its name.
               ..type = refer(annotatedParam.type.getDisplayString())
-              ..name = annotatedParam.name;
+              ..name = annotatedParam.displayName;
           }),
         );
       }
