@@ -1,4 +1,5 @@
 // dart format width=80
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'classic_file.dart';
