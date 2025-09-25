@@ -1,7 +1,7 @@
 // ignore_for_file: avoid-long-functions, prefer-extracting-function-callbacks, avoid-mutating-parameters
 // For reference : https://dinkomarinac.dev/from-annotations-to-generation-building-your-first-dart-code-generator
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
@@ -41,7 +41,7 @@ class RpcGenerator extends Generator {
     // For every available class, put it in `annotatedClasses` if it is
     // annotated with `RpcApi`, along with its `ConstantReader`. The
     // `ConstantReader` value is useful for reading the annotation fields.
-    final annotatedClasses = Map<ClassElement, ConstantReader>.fromEntries(
+    final annotatedClasses = Map<ClassElement2, ConstantReader>.fromEntries(
       libraryClasses.map((libraryClass) {
         final annotation = rpcApiAnnotation.firstAnnotationOfExact(
           libraryClass,
@@ -74,8 +74,8 @@ class RpcGenerator extends Generator {
       // For every class field, put it in `annotatedFields` if it is  annotated
       // with `RpcRouter`, along with its `ConstantReader`. The `ConstantReader`
       // value is useful for reading the annotation fields.
-      final annotatedFields = Map<FieldElement, ConstantReader>.fromEntries(
-        clss.fields.map((field) {
+      final annotatedFields = Map<FieldElement2, ConstantReader>.fromEntries(
+        clss.fields2.map((field) {
           final annotation = rpcRouterAnnotation.firstAnnotationOfExact(field);
 
           return annotation != null
@@ -93,7 +93,7 @@ class RpcGenerator extends Generator {
         // of type `ExampleRouter`, we search this class in the available
         // classes, in order to generate the Router class.
         final associatedClass = libraryClasses.firstWhereOrNull((libraryClass) {
-          return libraryClass.name == field.type.getDisplayString();
+          return libraryClass.displayName == field.type.getDisplayString();
         });
 
         // If no associated class is found, we cannot generate the Router class
@@ -102,7 +102,7 @@ class RpcGenerator extends Generator {
           // This is a warning.
           // ignore: avoid_print
           print(
-            'Warning: no associated router class for field `${field.name}` in class ${clss.name}.',
+            'Warning: no associated router class for field `${field.displayName}` in class ${clss.displayName}.',
           );
         } else {
           // Extract the router name from the `RpcRouter` annotation.
@@ -131,12 +131,12 @@ class RpcGenerator extends Generator {
   }
 
   // Generates a Rpc api class from a class element (annotated with `RpcApi`).
-  String _generateRpcApiClass(ClassElement element) {
-    final className = '_${element.name}';
+  String _generateRpcApiClass(ClassElement2 element) {
+    final className = '_${element.displayName}';
     // Get `RpcRouter` annotation type.
     final rpcRouterAnnotation = _typeChecker(RpcRouter);
     // Get class fields annotated with `RpcRouter`.
-    final annotatedFields = element.fields.where(
+    final annotatedFields = element.fields2.where(
       rpcRouterAnnotation.hasAnnotationOf,
     );
 
@@ -155,7 +155,7 @@ class RpcGenerator extends Generator {
                 ..annotations.add(refer('override'))
                 ..modifier = FieldModifier.final$
                 ..type = refer(annotatedField.type.getDisplayString())
-                ..name = annotatedField.name;
+                ..name = annotatedField.displayName;
             });
           }),
         )
@@ -178,7 +178,7 @@ class RpcGenerator extends Generator {
               ..initializers.addAll(
                 annotatedFields.map((annotatedField) {
                   return Code(
-                    '${annotatedField.name} = _${annotatedField.type.getDisplayString()}(dio, baseUrl: baseUrl)',
+                    '${annotatedField.displayName} = _${annotatedField.type.getDisplayString()}(dio, baseUrl: baseUrl)',
                   );
                 }),
               );
@@ -199,7 +199,7 @@ class RpcGenerator extends Generator {
     String apiPath,
     DartType? callAdapter,
     String routerName,
-    ClassElement associatedClass,
+    ClassElement2 associatedClass,
   ) {
     // Get `RpcMethod` annotation type.
     final rpcMethodAnnotation = _typeChecker(RpcMethod);
@@ -208,8 +208,8 @@ class RpcGenerator extends Generator {
     // is annotated with a `RpcMethod` annotation (so either `RpcQuery` or
     // `RpcMutation`), along with its `ConstantReader`. The `ConstantReader`
     // value is useful for reading the annotation fields.
-    final annotatedMethods = Map<MethodElement, ConstantReader>.fromEntries(
-      associatedClass.methods.map((method) {
+    final annotatedMethods = Map<MethodElement2, ConstantReader>.fromEntries(
+      associatedClass.methods2.map((method) {
         final annotation = rpcMethodAnnotation.firstAnnotationOf(method);
 
         return annotation != null
@@ -281,7 +281,7 @@ class RpcGenerator extends Generator {
 
   // Generate a Rpc method from a method element.
   Method _generateMethod(
-    MethodElement method,
+    MethodElement2 method,
     ConstantReader annotation,
     String apiPath,
     String routerName,
@@ -315,7 +315,7 @@ class RpcGenerator extends Generator {
         ])
         // Copy the method return type and its name.
         ..returns = refer(returnType.getDisplayString())
-        ..name = method.name;
+        ..name = method.displayName;
 
       if (annotatedParam != null) {
         // If an annotated param is present, add it to the method.

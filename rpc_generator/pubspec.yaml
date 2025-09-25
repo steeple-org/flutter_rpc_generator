@@ -1,6 +1,6 @@
 name: rpc_generator
 description: A generator used to generate RPC APIs.
-version: 1.1.1
+version: 1.1.2
 publish_to: none
 
 environment:
@@ -14,25 +14,19 @@ dependencies:
       url: https://github.com/steeple-org/flutter_rpc_generator.git
       path: rpc_annotations
 
-  analyzer: ^8.2.0
-  build: ^4.0.0
+  analyzer: ^7.4.0
+  build: ^3.0.0
   code_builder: ^4.11.0
   # Be careful, the version of this package must not be higher than the one pinned by the Flutter SDK.
   # Check here: https://github.com/flutter/flutter/blob/stable/packages/flutter/pubspec.yaml
   collection: ^1.19.1
-  dart_style: ^3.1.2
-  source_gen: ^4.0.1
+  dart_style: ^3.1.1
+  source_gen: ^3.0.0
   # Be careful, the version of this package must not be higher than the one pinned by the Flutter SDK.
   # Check here: https://github.com/flutter/flutter/blob/stable/packages/flutter/pubspec.yaml
   meta: ^1.16.0
 
 dev_dependencies:
   generator_test: ^0.6.0
-  retrofit_generator:
-    git:
-      url: https://github.com/trevorwang/retrofit.dart.git
-      path: generator
-      # Contains our fix for nullable entities in CallAdapter.
-      ref: 63545c210ad39fa1c58668222ad1a0d2cd461355
   # Currently tests do not work because of this issue: https://github.com/dart-lang/test/issues/2535
   test: ^1.26.3

@@ -9,7 +9,7 @@ workspace:
   - rpc_generator
 
 dev_dependencies:
-  melos: ^7.0.0-dev.7
+  melos: ^7.0.0
 
 melos:
   scripts:
