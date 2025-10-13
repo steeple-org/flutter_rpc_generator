@@ -14,14 +14,14 @@ dependencies:
       url: https://github.com/steeple-org/flutter_rpc_generator.git
       path: rpc_annotations
 
-  analyzer: ^7.4.0
+  analyzer: ^8.3.0
   build: ^3.0.0
   code_builder: ^4.11.0
   # Be careful, the version of this package must not be higher than the one pinned by the Flutter SDK.
   # Check here: https://github.com/flutter/flutter/blob/stable/packages/flutter/pubspec.yaml
   collection: ^1.19.1
   dart_style: ^3.1.1
-  source_gen: ^3.0.0
+  source_gen: ^4.0.2
   # Be careful, the version of this package must not be higher than the one pinned by the Flutter SDK.
   # Check here: https://github.com/flutter/flutter/blob/stable/packages/flutter/pubspec.yaml
   meta: ^1.16.0
