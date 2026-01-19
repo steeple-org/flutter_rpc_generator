@@ -11,4 +11,4 @@ resolution: workspace
 dependencies:
   # Be careful, the version of this package must not be higher than the one pinned by the Flutter SDK.
   # Check here: https://github.com/flutter/flutter/blob/stable/packages/flutter/pubspec.yaml
-  meta: ^1.16.0
+  meta: ^1.18.0
