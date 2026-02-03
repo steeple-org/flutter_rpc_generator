@@ -30,7 +30,6 @@ abstract class _MyFooRpcRouter implements MyFooRpcRouter {
   Future<String> myFooQuery(@Query('input') String fooQueryParam);
   @override
   @POST('/path/trpc/foo.mutationProcedure')
-  @UseCallAdapter(MyCallAdapter)
   Future<void> myFooMutation(@Body() int fooMutationParam);
 }
 
