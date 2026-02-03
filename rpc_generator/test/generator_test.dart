@@ -1,32 +1,55 @@
-import 'package:generator_test/generator_test.dart';
+import 'dart:io';
+
+import 'package:build_test/build_test.dart';
 import 'package:rpc_generator/src/generator.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
 
 void main() {
-  SuccessGenerator createGenerator(String fileName) {
-    return SuccessGenerator(
-      ['$fileName.dart'],
-      ['$fileName.g.dart'],
-      const RpcGenerator(),
-      partOfFile: '$fileName.dart',
-      inputDir: 'test/src/inputs',
-      fixtureDir: 'test/src/expected',
+  Future<void> testGenerator(String fileName) async {
+    final inputPath = 'test/src/inputs/$fileName.dart';
+    final expectedPath = 'test/src/expected/$fileName.g.dart';
+
+    final inputContent = File(inputPath).readAsStringSync();
+    final expectedContent = File(expectedPath).readAsStringSync();
+
+    final readerWriter = TestReaderWriter(rootPackage: 'a');
+    await readerWriter.testing.loadIsolateSources();
+
+    final builder = PartBuilder(
+      [const RpcGenerator()],
+      '.g.dart',
+      header: '''
+    // coverage:ignore-file
+    // GENERATED CODE - DO NOT MODIFY BY HAND
+      ''',
+    );
+
+    await testBuilder(
+      builder,
+      {
+        'a|lib/$fileName.dart': inputContent,
+      },
+      outputs: {
+        'a|lib/$fileName.g.dart': decodedMatches(expectedContent),
+      },
+      readerWriter: readerWriter,
     );
   }
 
   test('RpcGenerator - classic file', () async {
-    await createGenerator('classic_file').test();
+    await testGenerator('classic_file');
   });
 
   test('RpcGenerator - without routers', () async {
-    await createGenerator('without_routers').test();
+    await testGenerator('without_routers');
   });
 
   test('RpcGenerator - without methods', () async {
-    await createGenerator('without_methods').test();
+    await testGenerator('without_methods');
   });
 
   test('RpcGenerator - with call adapter', () async {
-    await createGenerator('with_call_adapter').test();
+    await testGenerator('with_call_adapter');
   });
 }
