@@ -233,14 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  generator_test:
-    dependency: transitive
-    description:
-      name: generator_test
-      sha256: e26926e259f80ff5557f4e336ee3e868828f949a592301a3f66d8451d4a32a66
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   glob:
     dependency: transitive
     description:

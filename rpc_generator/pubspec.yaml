@@ -27,6 +27,5 @@ dependencies:
   meta: ^1.16.0
 
 dev_dependencies:
-  generator_test: ^0.6.0
-  # Currently tests do not work because of this issue: https://github.com/dart-lang/test/issues/2535
+  build_test: ^3.3.3
   test: ^1.26.3

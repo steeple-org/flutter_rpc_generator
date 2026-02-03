@@ -295,7 +295,7 @@ class RpcGenerator extends Generator {
     // Get `RpcInput` annotation type.
     final rpcInputAnnotation = _typeChecker(RpcInput);
     // Get the first method parameter annotated with `RpcInput`.
-    final annotatedParam = method.baseElement.formalParameters.firstWhereOrNull(
+    final annotatedParam = method.formalParameters.firstWhereOrNull(
       rpcInputAnnotation.hasAnnotationOfExact,
     );
 
